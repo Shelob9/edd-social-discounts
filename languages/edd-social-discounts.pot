@@ -1,0 +1,353 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Easy Digital Downloads - Social Discounts\n"
+"POT-Creation-Date: 2013-12-19 15:43+1200\n"
+"PO-Revision-Date: 2013-12-19 15:43+1200\n"
+"Last-Translator: \n"
+"Language-Team: Sumobi <andrew@sumobi.com>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.3\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../edd-social-discounts.php:253
+#, php-format
+msgid ""
+"You must install %sEasy Digital Downloads%s to use the EDD Social Discounts "
+"Add-On."
+msgstr ""
+
+#: ../edd-social-discounts.php:257
+msgid ""
+"The EDD Social Discounts requires at least Easy Digital Downloads Version "
+"1.8.4. Please update Easy Digital Downloads."
+msgstr ""
+
+#: ../edd-social-discounts.php:393
+msgid "Share"
+msgstr ""
+
+#: ../edd-social-discounts.php:648 ../edd-social-discounts.php:995
+msgid "Thanks for sharing!"
+msgstr ""
+
+#: ../edd-social-discounts.php:661 ../edd-social-discounts.php:1002
+msgid "Add this product to your cart and the discount will be applied."
+msgstr ""
+
+#: ../edd-social-discounts.php:872
+#, php-format
+msgid "%s/Posts/Pages that were shared before payment"
+msgstr ""
+
+#: ../edd-social-discounts.php:906
+msgid "Settings"
+msgstr ""
+
+#: ../edd-social-discounts.php:927
+msgid "Select discount"
+msgstr ""
+
+#: ../edd-social-discounts.php:934
+msgid "No discounts found"
+msgstr ""
+
+#: ../edd-social-discounts.php:940
+msgid "Social Discounts"
+msgstr ""
+
+#: ../edd-social-discounts.php:945
+msgid "Social Services To Enable"
+msgstr ""
+
+#: ../edd-social-discounts.php:949
+msgid "Twitter"
+msgstr ""
+
+#: ../edd-social-discounts.php:950
+msgid "Facebook"
+msgstr ""
+
+#: ../edd-social-discounts.php:951
+msgid "Google+"
+msgstr ""
+
+#: ../edd-social-discounts.php:952
+msgid "LinkedIn"
+msgstr ""
+
+#: ../edd-social-discounts.php:958
+msgid "Display Sharing Services"
+msgstr ""
+
+#: ../edd-social-discounts.php:959
+msgid ""
+"Sharing services can be positioned on a per download basis by using the "
+"[edd_social_discount] shortcode."
+msgstr ""
+
+#: ../edd-social-discounts.php:962
+msgid "Before content"
+msgstr ""
+
+#: ../edd-social-discounts.php:963
+msgid "After content"
+msgstr ""
+
+#: ../edd-social-discounts.php:964
+msgid "Disable automatic display (use shortcode instead)"
+msgstr ""
+
+#: ../edd-social-discounts.php:971
+msgid "Discount Code"
+msgstr ""
+
+#: ../edd-social-discounts.php:972
+msgid ""
+"Select the EDD discount that will be applied to the checkout. Leave as "
+"default to use plugin as simple sharing service."
+msgstr ""
+
+#: ../edd-social-discounts.php:978
+msgid "Social Discount Title"
+msgstr ""
+
+#: ../edd-social-discounts.php:979
+msgid "Enter the title that will appear above the sharing services."
+msgstr ""
+
+#: ../edd-social-discounts.php:981
+msgid "Share for a discount"
+msgstr ""
+
+#: ../edd-social-discounts.php:985
+msgid "Social Discount Message"
+msgstr ""
+
+#: ../edd-social-discounts.php:986
+msgid ""
+"Enter the message that will appear underneath the Social Discount Title."
+msgstr ""
+
+#: ../edd-social-discounts.php:988
+msgid ""
+"Simply share this and a discount will be applied to your purchase at "
+"checkout."
+msgstr ""
+
+#: ../edd-social-discounts.php:992
+msgid "Social Discount Success Title"
+msgstr ""
+
+#: ../edd-social-discounts.php:993
+msgid ""
+"Enter the title that will appear above the sharing services when the product "
+"has been shared."
+msgstr ""
+
+#: ../edd-social-discounts.php:999
+msgid "Social Discount Success Message"
+msgstr ""
+
+#: ../edd-social-discounts.php:1000
+msgid ""
+"Enter the message that will appear underneath the Social Discount Title when "
+"the product has been shared."
+msgstr ""
+
+#: ../edd-social-discounts.php:1007
+msgid "Twitter Username"
+msgstr ""
+
+#: ../edd-social-discounts.php:1008
+msgid ""
+"Enter the Twitter username you want the Follow button to use. Leave blank to "
+"disable."
+msgstr ""
+
+#: ../edd-social-discounts.php:1014
+msgid "Twitter Count Box Position"
+msgstr ""
+
+#: ../edd-social-discounts.php:1015
+msgid "Displays how the count box is positioned with the button."
+msgstr ""
+
+#: ../edd-social-discounts.php:1018
+msgid "Horizontal"
+msgstr ""
+
+#: ../edd-social-discounts.php:1019
+msgid "Vertical"
+msgstr ""
+
+#: ../edd-social-discounts.php:1020 ../edd-social-discounts.php:1083
+#: ../edd-social-discounts.php:1129
+msgid "None"
+msgstr ""
+
+#: ../edd-social-discounts.php:1027
+msgid "Twitter Button Size"
+msgstr ""
+
+#: ../edd-social-discounts.php:1028
+msgid "Note: the count box cannot show when large is selected."
+msgstr ""
+
+#: ../edd-social-discounts.php:1031 ../edd-social-discounts.php:1095
+msgid "Medium"
+msgstr ""
+
+#: ../edd-social-discounts.php:1032
+msgid "Large"
+msgstr ""
+
+#: ../edd-social-discounts.php:1039
+msgid "Twitter Locale"
+msgstr ""
+
+#: ../edd-social-discounts.php:1040
+msgid "Enter the language code, eg en."
+msgstr ""
+
+#: ../edd-social-discounts.php:1046
+msgid "Facebook Button Layout"
+msgstr ""
+
+#: ../edd-social-discounts.php:1047
+msgid "Layout of the button and count."
+msgstr ""
+
+#: ../edd-social-discounts.php:1050
+msgid "Button Count"
+msgstr ""
+
+#: ../edd-social-discounts.php:1051
+msgid "Box Count"
+msgstr ""
+
+#: ../edd-social-discounts.php:1058
+msgid "Facebook Button Action"
+msgstr ""
+
+#: ../edd-social-discounts.php:1059
+msgid "The verb to display on the button."
+msgstr ""
+
+#: ../edd-social-discounts.php:1062
+msgid "Like"
+msgstr ""
+
+#: ../edd-social-discounts.php:1063
+msgid "Recommend"
+msgstr ""
+
+#: ../edd-social-discounts.php:1070
+msgid "Facebook Locale"
+msgstr ""
+
+#: ../edd-social-discounts.php:1071
+msgid "Enter the language code, eg en_US. Facebook uses ISO country codes."
+msgstr ""
+
+#: ../edd-social-discounts.php:1077
+msgid "Google+ Button Annotation"
+msgstr ""
+
+#: ../edd-social-discounts.php:1078
+msgid "The style of the annotation that displays next to the button."
+msgstr ""
+
+#: ../edd-social-discounts.php:1081
+msgid "Bubble"
+msgstr ""
+
+#: ../edd-social-discounts.php:1082
+msgid "Inline"
+msgstr ""
+
+#: ../edd-social-discounts.php:1090
+msgid "Google+ Button Size"
+msgstr ""
+
+#: ../edd-social-discounts.php:1091
+msgid "The size of the button"
+msgstr ""
+
+#: ../edd-social-discounts.php:1094
+msgid "Small"
+msgstr ""
+
+#: ../edd-social-discounts.php:1096
+msgid "Standard"
+msgstr ""
+
+#: ../edd-social-discounts.php:1097
+msgid "Tall"
+msgstr ""
+
+#: ../edd-social-discounts.php:1104
+msgid "Google+ Button Recommendations"
+msgstr ""
+
+#: ../edd-social-discounts.php:1105
+msgid "Show recommendations within the +1 hover bubble"
+msgstr ""
+
+#: ../edd-social-discounts.php:1108
+msgid "Yes"
+msgstr ""
+
+#: ../edd-social-discounts.php:1109
+msgid "No"
+msgstr ""
+
+#: ../edd-social-discounts.php:1116
+msgid "Google+ Locale"
+msgstr ""
+
+#: ../edd-social-discounts.php:1117
+msgid "Enter the language code, eg en-US. "
+msgstr ""
+
+#: ../edd-social-discounts.php:1117
+msgid "List of supported languages"
+msgstr ""
+
+#: ../edd-social-discounts.php:1123
+msgid "LinkedIn Counter"
+msgstr ""
+
+#: ../edd-social-discounts.php:1124
+msgid "Whether or not to show the the share count and where it gets displayed"
+msgstr ""
+
+#: ../edd-social-discounts.php:1127
+msgid "Top"
+msgstr ""
+
+#: ../edd-social-discounts.php:1128
+msgid "Right"
+msgstr ""
+
+#: ../edd-social-discounts.php:1136
+msgid "LinkedIn Locale"
+msgstr ""
+
+#: ../edd-social-discounts.php:1137
+msgid "Enter the language code, eg en_US. "
+msgstr ""
+
+#: ../includes/EDD_License_Handler.php:112
+#, php-format
+msgid "%1$s License Key"
+msgstr ""
+
+#: ../includes/EDD_License_Handler.php:218
+msgid "Deactivate License"
+msgstr ""

@@ -185,7 +185,10 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 		 * @since 2.0
 		*/
 		private function licensing() {
-			$license = new EDD_License( $this->file, $this->title, $this->version, 'Andrew Munro' );
+			//check EDD_License class is exist
+			if ( class_exists( 'EDD_License' ) ) {
+				$license = new EDD_License( $this->file, $this->title, $this->version, 'Andrew Munro' );
+			}
 		}
 
 		/**

@@ -25,14 +25,24 @@ After activation, configure the plugin from downloads -> settings -> extensions
 
 == Changelog ==
 
-= 2.0.1 =
-* New: edd_social_discounts_share_url filter hook for modifying the URL
-* New: edd_social_discounts_success_title filter hook
-* New: edd_social_discounts_success_message filter hook
-* New: edd_social_discounts_ajax_return filter hook
-* New: edd_social_discounts_before_share_box action hook
-* New: edd_social_discounts_after_share_box action hook
-* New: added CSS class names for each of the networks on their wrapping div
+v2.0.2
+July 24th, 2014
 
-= 2.0 =
-* Initial release
+New:   When using shortcode on the checkout, the cart total and discount will show after share
+Tweak: Removed old EDD licensing files that are no longer required
+
+v2.0.1
+December 22, 2013
+
+New: edd_social_discounts_share_url filter hook for modifying the URL
+New: edd_social_discounts_success_title filter hook
+New: edd_social_discounts_success_message filter hook
+New: edd_social_discounts_ajax_return filter hook
+New: edd_social_discounts_before_share_box action hook
+New: edd_social_discounts_after_share_box action hook
+New: added CSS class names for each of the networks on their wrapping div
+
+v2.0
+December 18, 2013
+
+Initial release

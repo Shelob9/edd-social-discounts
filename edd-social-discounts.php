@@ -3,7 +3,7 @@
 Plugin Name: Easy Digital Downloads - Social Discounts
 Plugin URI: https://easydigitaldownloads.com/extensions/edd-social-discounts/
 Description: Offer customers a discount for sharing your products.
-Version: 2.0.1
+Version: 2.0.2
 Author: Andrew Munro, Sumobi
 Author URI: http://sumobi.com/
 License: GPL-2.0+
@@ -98,7 +98,7 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 		 * @return void
 		 */
 		private function setup_globals() {
-			$this->version 		= '2.0.1';
+			$this->version 		= '2.0.2';
 			$this->title 		= 'EDD Social Discounts';
 
 			// paths
@@ -185,7 +185,10 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 		 * @since 2.0
 		*/
 		private function licensing() {
-			$license = new EDD_License( $this->file, $this->title, $this->version, 'Andrew Munro' );
+			// check if EDD_License class exists
+			if ( class_exists( 'EDD_License' ) ) {
+				$license = new EDD_License( $this->file, $this->title, $this->version, 'Andrew Munro' );
+			}
 		}
 
 		/**
@@ -594,8 +597,6 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 
 					jQuery(document).on( 'productShared', function(e) {
 
-						if( e.url == window.location.href ) {
-
 					    	var postData = {
 					            action: 'share_product',
 					            product_id: <?php echo get_the_ID(); ?>, // post the download's ID
@@ -612,20 +613,16 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 				                if( share_response ) {
 
 				                    if ( share_response.msg == 'valid' ) {
-				                       console.log('successfully shared');
-				                       console.log( share_response );
+										console.log('successfully shared');
+										console.log( share_response );
 
-				                       console.log( share_response.total );
-				                       console.log( share_response.total_plain );
-
-				                        $('.edd_cart_discount').html( share_response.html );
+										$('.edd_cart_discount').html( share_response.html );
                         				$('.edd_cart_discount_row').show();
 
+                        				// update cart amounts with new total
 										$('.edd_cart_amount').each(function() {
 											$(this).text(share_response.total);
 										});
-
-										
 
 				                       jQuery('.edd-sd-share .edd-sd-title').html( share_response.success_title );
 				                       jQuery('.edd-sd-share .edd-sd-message').html( share_response.success_message );
@@ -646,7 +643,6 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 				            console.log( data );
 				        });
 
-						}
 					});
 				});
 			<?php endif; ?>
@@ -705,35 +701,34 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 			// check nonce
 			check_ajax_referer( 'edd_sd_nonce', 'nonce' );
 
-				global $edd_options;
+			global $edd_options;
 
-				// get discount code's ID from plugin settings
-				$discount = edd_get_option( 'edd_sd_discount_code', '' );
+			// get discount code's ID from plugin settings
+			$discount  = edd_get_option( 'edd_sd_discount_code', '' );
 
-				// get discount code by ID
-				$discount = edd_get_discount_code( $discount );
+			// get discount code by ID
+			$discount  = edd_get_discount_code( $discount );
 
-				// set cart discount. Discount will only be applied if discount exists.
-				$discounts = edd_set_cart_discount( $discount );
-				$total     = edd_get_cart_total( $discounts );
+			// set cart discount. Discount will only be applied if discount exists.
+			$discounts = edd_set_cart_discount( $discount );
+			$total     = edd_get_cart_total( $discounts );
 
-				// purchase was shared
-				EDD()->session->set( 'edd_shared', true );
+			// purchase was shared
+			EDD()->session->set( 'edd_shared', true );
 
-				// store the download ID temporarily
-				EDD()->session->set( 'edd_shared_id', $_POST['product_id'] );
-				
-				$return = apply_filters( 'edd_social_discounts_ajax_return', array(
-					'msg'             => 'valid',
-					'success_title'	  => $this->success_title(),
-					'success_message' => $this->success_message( $_POST['product_id'] ),
-					'product_id'      => $_POST['product_id'],
-					'total_plain'     => $total,
-					'total'           => html_entity_decode( edd_currency_filter( edd_format_amount( $total ) ), ENT_COMPAT, 'UTF-8' ),
-					'html'            => edd_get_cart_discounts_html( $discounts )
-				) );
+			// store the download ID temporarily
+			EDD()->session->set( 'edd_shared_id', $_POST['product_id'] );
+			
+			$return = apply_filters( 'edd_social_discounts_ajax_return', array(
+				'msg'             => 'valid',
+				'success_title'	  => $this->success_title(),
+				'success_message' => $this->success_message( $_POST['product_id'] ),
+				'product_id'      => $_POST['product_id'],
+				'total'           => html_entity_decode( edd_currency_filter( edd_format_amount( $total ) ), ENT_COMPAT, 'UTF-8' ),
+				'html'            => edd_get_cart_discounts_html( $discounts )
+			) );
 
-				echo json_encode( $return );
+			echo json_encode( $return );
 
 			edd_die();
 		}

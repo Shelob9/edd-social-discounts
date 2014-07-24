@@ -615,6 +615,18 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 				                       console.log('successfully shared');
 				                       console.log( share_response );
 
+				                       console.log( share_response.total );
+				                       console.log( share_response.total_plain );
+
+				                        $('.edd_cart_discount').html( share_response.html );
+                        				$('.edd_cart_discount_row').show();
+
+										$('.edd_cart_amount').each(function() {
+											$(this).text(share_response.total);
+										});
+
+										
+
 				                       jQuery('.edd-sd-share .edd-sd-title').html( share_response.success_title );
 				                       jQuery('.edd-sd-share .edd-sd-message').html( share_response.success_message );
 
@@ -702,7 +714,8 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 				$discount = edd_get_discount_code( $discount );
 
 				// set cart discount. Discount will only be applied if discount exists.
-				edd_set_cart_discount( $discount );
+				$discounts = edd_set_cart_discount( $discount );
+				$total     = edd_get_cart_total( $discounts );
 
 				// purchase was shared
 				EDD()->session->set( 'edd_shared', true );
@@ -711,10 +724,13 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 				EDD()->session->set( 'edd_shared_id', $_POST['product_id'] );
 				
 				$return = apply_filters( 'edd_social_discounts_ajax_return', array(
-					'msg'				=> 'valid',
-					'success_title'		=> $this->success_title(),
-					'success_message'	=> $this->success_message( $_POST['product_id'] ),
-					'product_id'		=> $_POST['product_id']
+					'msg'             => 'valid',
+					'success_title'	  => $this->success_title(),
+					'success_message' => $this->success_message( $_POST['product_id'] ),
+					'product_id'      => $_POST['product_id'],
+					'total_plain'     => $total,
+					'total'           => html_entity_decode( edd_currency_filter( edd_format_amount( $total ) ), ENT_COMPAT, 'UTF-8' ),
+					'html'            => edd_get_cart_discounts_html( $discounts )
 				) );
 
 				echo json_encode( $return );

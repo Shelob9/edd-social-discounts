@@ -54,7 +54,17 @@ function edd_social_discounts_load_share_box() {
 function edd_social_discounts_share_box( $id = '', $title = '', $message = '', $tweet = '', $locked = '' ) {
 	global $edd_options;
 
-	
+	// use ID passed into function, otherwise get the post ID
+	$id = $id ? $id : get_the_ID();
+//	$id = get_the_ID();
+
+//	var_dump( $id );
+
+
+	//	$test = the_title_attribute( 'echo=0' );
+	//	$test = get_the_title( $id );
+
+	//	var_dump( $test );
 
 //	var_dump( $locked );
 
@@ -67,11 +77,15 @@ function edd_social_discounts_share_box( $id = '', $title = '', $message = '', $
 	// load required scripts if template tag or shortcode has been used
 	//$edd_social_discounts::$add_script = true;
 
+
+	$per_download_title = get_post_meta( $id, 'edd_social_discount_title', true );
+	$per_download_message = get_post_meta( $id, 'edd_social_discount_message', true );
+
 	// get custom title, else default title
 	// show the success message if product has been shared, else default title
-	if ( EDD()->session->get( 'edd_shared_ids' ) && in_array( get_the_ID(), EDD()->session->get( 'edd_shared_ids' ) ) ) {
+	if ( EDD()->session->get( 'edd_shared_ids' ) && in_array( $id, EDD()->session->get( 'edd_shared_ids' ) ) ) {
 
-		if (  edd_social_discounts_is_locked( get_the_ID() ) ) {
+		if (  edd_social_discounts_is_locked( $id ) ) {
 			$share_title = edd_social_discounts_share_to_unlock_success_title( $id );
 			$share_message = edd_social_discounts_share_to_unlock_success_message( $id );
 		} else {
@@ -86,8 +100,11 @@ function edd_social_discounts_share_box( $id = '', $title = '', $message = '', $
 			$share_title = esc_attr( $title );
 		}
 		// locked title
-		elseif ( edd_social_discounts_is_locked( get_the_ID() ) ) {
+		elseif ( edd_social_discounts_is_locked( $id ) ) {
 			$share_title = isset( $edd_options['edd_sd_share_to_unlock_title'] ) && ! empty( $edd_options['edd_sd_share_to_unlock_title'] ) ? esc_attr( $edd_options['edd_sd_share_to_unlock_title'] ) : '';
+		}
+		elseif ( $per_download_title ) {
+			$share_title = esc_attr( $per_download_title );
 		}
 		// title from plugin settings
 		else {
@@ -98,8 +115,12 @@ function edd_social_discounts_share_box( $id = '', $title = '', $message = '', $
 		if ( $message ) {
 			$share_message = esc_attr( $message );
 		}
-		elseif ( edd_social_discounts_is_locked( get_the_ID() ) ) {
+		elseif ( edd_social_discounts_is_locked( $id ) ) {
 			$share_message = isset( $edd_options['edd_sd_share_to_unlock_message'] ) && ! empty( $edd_options['edd_sd_share_to_unlock_message'] ) ? esc_attr( $edd_options['edd_sd_share_to_unlock_message'] ) : '';
+		}
+		// per download message
+		elseif ( $per_download_message ) {
+			$share_message = esc_attr( $per_download_message );
 		}
 		// message from plugin settings
 		else {
@@ -112,15 +133,17 @@ function edd_social_discounts_share_box( $id = '', $title = '', $message = '', $
 	if ( $tweet ) {
 		$twitter_default_text = esc_attr( $tweet );
 	}
+	// else if we're on a single download page
+	elseif ( is_singular( 'download' ) ) {
+		$twitter_default_text = the_title_attribute( 'echo=0' );
+	//	$twitter_default_text = get_the_title( $id );
+	}
 	// default twitter message that is shown when shared. 
 	// if an ID was passed
 	elseif ( $id ) {
 		$twitter_default_text = get_the_title( $id );
 	}
-	// else if we're on a single download page
-	elseif ( is_singular( 'download' ) ) {
-		$twitter_default_text = the_title_attribute( 'echo=0' );
-	}
+	
 	else {
 		$twitter_default_text = '';
 	}
@@ -194,7 +217,12 @@ function edd_social_discounts_share_box( $id = '', $title = '', $message = '', $
 		</div>
 		<?php endif; ?>
 
-		<?php do_action( 'edd_social_discounts_after_share_box' ); ?>
+		<?php 
+		/**
+		 * When the download is unlocked, the purchase button is loaded onto this hook
+		 */
+		do_action( 'edd_social_discounts_after_share_box', $id ); 
+		?>
 
 		<?php if ( 'yes' == $locked ) { ?>
 			<div class="edd-sd-locked"></div>
@@ -300,6 +328,8 @@ function edd_social_discounts_purchase_download_form( $purchase_form, $args ) {
 
 //	$form_id = ! empty( $args['form_id'] ) ? $args['form_id'] : 'edd_purchase_' . $download_id;
 
+//	var_dump( $download_id );
+
 	// return if we're not dealing with a locked download
 	if ( 
 		! edd_social_discounts_is_locked( $download_id ) || 
@@ -322,6 +352,46 @@ function edd_social_discounts_purchase_download_form( $purchase_form, $args ) {
     return apply_filters( 'edd_social_discounts_purchase_download_form', ob_get_clean() );
 }
 add_filter( 'edd_purchase_download_form', 'edd_social_discounts_purchase_download_form', 10, 2 );
+
+
+
+/**
+ * If download has been unlocked, and the page is refreshed, show the purchase button
+ * 
+ * @since 2.1
+ * @param $id ID of download/post/page
+ */
+function edd_social_discounts_already_unlocked( $id ) {
+
+	// only locked downloads need the button to remain
+	if ( ! edd_social_discounts_is_locked( $id ) )
+		return;
+
+	// has been shared
+	if ( EDD()->session->get( 'edd_shared_ids' ) && in_array( $id, EDD()->session->get( 'edd_shared_ids' ) ) ) {
+		// attach purchase button
+
+		echo edd_append_purchase_link( $id );
+	}
+
+}
+add_action( 'edd_social_discounts_after_share_box', 'edd_social_discounts_already_unlocked' );
+
+
+
+// function edd_append_purchase_link2( $download_id ) {
+// 	if ( ! get_post_meta( $download_id, '_edd_hide_purchase_link', true ) ) {
+// 		echo edd_get_purchase_link( array( 'download_id' => $download_id ) );
+// 	}
+// }
+
+
+
+
+
+
+
+
 
 /**
  * Prevent user from adding the download to the cart from URL

@@ -41,7 +41,8 @@ function edd_social_discounts_print_script() {
 		        jQuery.event.trigger({
 		            type: "productShared",
 		            url: event.target.baseURI,
-		            id: jQuery( '#' + event.target.id ).parent().parent().next('input[name=edd_sd_download_id]').val() // get ID of widget, then find value of input
+		        //    id: jQuery( '#' + event.target.id ).parent().parent().next('input[name=edd_sd_download_id]').val() // get ID of widget, then find value of input
+		            id: jQuery( '#' + event.target.id ).closest('.edd-sd-share').next('input[name=edd_sd_download_id]').val() // get ID of widget, then find value of input
 		        });
 		    });
 
@@ -193,8 +194,7 @@ function edd_social_discounts_print_script() {
 
 			    	var postData = {
 			            action: 'share_product',
-			       
-			            product_id: e.id, // post the download's ID
+			            product_id: e.id, // post the ID
 			            nonce: edd_social_discount_vars.edd_sd_nonce
 			        };
 
@@ -210,17 +210,16 @@ function edd_social_discounts_print_script() {
 		                	// locked downloads
 		                	if ( share_response.button ) {
 		                		
-
-
-
-
 								jQuery( '.edd-sd-share' ).each(function( index ) {
 
 									if ( jQuery( this ).data('id') == e.id ) {
-									//	console.log( this );
+										console.log( this );
 										console.log( 'ID ' + e.id );
+
 										// replace empty div with share button
+										// should only have to do this for locked downloads
 										jQuery(this).find('.edd-sd-locked').replaceWith( share_response.button );
+									//	jQuery(this).find('.edd-sd-locked').addClass('test');
 									}
 									
 								});	

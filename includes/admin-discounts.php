@@ -9,13 +9,12 @@
  * @return [type] [description]
  */
 function edd_social_discounts_edit_discount_form( $discount_id, $discount = '' ) {
-	$select_products = edd_social_discounts_get_social_discount_products( $discount_id );
-	
-	var_dump( edd_social_discounts_get_social_discount_products( $discount_id ) );
+	$selected_products = edd_social_discounts()->discounts->get_social_discount_products( $discount_id );
+
+	var_dump( $selected_products );
 
 	$already_shared = edd_social_discounts_get_shared_product_ids();
 
-	//var_dump( edd_social_discounts_get_discount_id() );
 	?>
 
 	<table class="form-table">
@@ -32,16 +31,10 @@ function edd_social_discounts_edit_discount_form( $discount_id, $discount = '' )
 				<select name="social_discount_products[]" id="social-discount-products" data-placeholder="<?php printf( __( 'Choose one or more %s', 'edd-social-discounts' ), edd_get_label_plural() ); ?>" multiple class="edd-select edd-select-chosen">
 					<?php if ( $products ) : 
 					
-					$selected_products = edd_social_discounts_get_social_discount_products( $discount_id );
-					
-					//var_dump( $selected_products );
-
 					foreach ( $products as $product ) { 
 						$selected = in_array( $product->ID, $selected_products ) ? $product->ID : '';
 						$disabled = in_array( $product->ID, $already_shared ) && ! $selected ? ' disabled' : '';
-						$value = ! $disabled ? 'value="' . absint( $product->ID ) . '"' : '';
-						//$show_selected = 
-						//$disabled = '';
+						$value    = ! $disabled ? 'value="' . absint( $product->ID ) . '"' : '';
 					?>
 					<option<?php echo $disabled; ?> <?php echo $value; ?> <?php echo selected( $selected, $product->ID, false ); ?>><?php echo esc_html( get_the_title( $product->ID ) ); ?></option>
 
@@ -54,15 +47,6 @@ function edd_social_discounts_edit_discount_form( $discount_id, $discount = '' )
 					<?php endif; ?>
 
 				</select>
-
-					<p class="description"><?php printf( __( '%s that this discount code will be applied to when shared.', 'edd' ), edd_get_label_plural() ); ?></p>
-
-					<p>
-						<label for="social_discount_global_discount">
-							<input type="checkbox" id="social_discount_global_discount" name="social_discount_global" value="1"<?php checked( true, edd_social_discounts_is_discount_global( $discount_id ) ); ?>/>
-							<?php printf( __( 'Apply sharing discount to entire cart when %s are shared?', 'edd' ), edd_get_label_plural() ); ?>
-						</label>
-					</p>
 
 				</td>
 			</tr>
@@ -80,6 +64,7 @@ add_action( 'edd_edit_discount_form_bottom', 'edd_social_discounts_edit_discount
  */
 function edd_social_discounts_add_to_discount_form() {
 	$already_shared = edd_social_discounts_get_shared_product_ids();
+	//$selected_products = edd_social_discounts()->discounts->get_social_discount_products( $discount_id );
 ?>
 
 	<table class="form-table">
@@ -95,14 +80,13 @@ function edd_social_discounts_add_to_discount_form() {
 				?>
 				<select name="social_discount_products[]" id="social-discount-products" data-placeholder="<?php printf( __( 'Choose one or more %s', 'edd-social-discounts' ), edd_get_label_plural() ); ?>" multiple class="edd-select edd-select-chosen">
 					<?php if ( $products ) : 
-					// get upsell product IDs from DB
-					$selected_products = edd_social_discounts_get_social_discount_products();
-
+					
+					
 					foreach ( $products as $product ) { 
-						$selected = in_array( $product->ID, $selected_products ) ? $product->ID : '';
+					//	$selected = in_array( $product->ID, $selected_products ) ? $product->ID : '';
 						$disabled = in_array( $product->ID, $already_shared ) ? ' disabled' : '';
 					?>
-					<option<?php echo $disabled; ?> value="<?php echo absint( $product->ID ); ?>" <?php echo selected( $selected, $product->ID, false ); ?>><?php echo esc_html( get_the_title( $product->ID ) ); ?></option>
+					<option<?php echo $disabled; ?> value="<?php echo absint( $product->ID ); ?>"><?php echo esc_html( get_the_title( $product->ID ) ); ?></option>
 
 					<?php } ?>
 
@@ -176,13 +160,7 @@ function edd_social_discounts_add_or_update_discount( $details, $discount_id ) {
 
 	// update the array of downloads stored in the db with our new ids
 	update_post_meta( $discount_id, '_edd_discount_social_discount_products', $ids );
-	
 
-	// update global option
-	// $global = isset( $details['social_discount_global'] ) ? true : '';
-	// if ( isset( $details['social_discount_global'] ) ) {
-	// 	update_post_meta( $discount_id, '_edd_discount_social_discount_global', $global );
-	// }
 }
 add_action( 'edd_post_insert_discount', 'edd_social_discounts_add_or_update_discount', 10, 2 );
 add_action( 'edd_post_update_discount', 'edd_social_discounts_add_or_update_discount', 10, 2 );

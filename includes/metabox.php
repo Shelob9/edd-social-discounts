@@ -28,7 +28,9 @@ add_action( 'add_meta_boxes', 'edd_social_discounts_meta_box' );
 function edd_social_discounts_render_meta_box() {
 	$discounts = edd_get_discounts( array( 'posts_per_page' => -1, 'post_status' => 'active' ) );
 	?>
-	<p><strong><?php _e( 'Apply discount when shared:', 'edd-social-discounts' ); ?></strong></p>
+	<label for="download-social-discount">
+		<p><strong><?php printf( __( 'Select the discount that will be applied when this %s is shared', 'edd-social-discounts' ), edd_get_label_singular( true ) ); ?></strong></p>
+	</label>
 
 	<p>
 	<select name="edd_social_discount" id="download-social-discount" data-placeholder="<?php printf( __( 'Select a discount', 'edd-social-discounts' ), edd_get_label_plural() ); ?>" class="edd-select">
@@ -48,10 +50,36 @@ function edd_social_discounts_render_meta_box() {
 	</select>
 	</p>
 
-	<label for="download-social-discount">
-		<p class="description"><?php printf( __( 'Select the discount that will be applied when this %s is shared', 'edd-social-discounts' ), edd_get_label_singular( true ) ); ?></p>
-	</label>
+	<?php
+	/**
+	 * Per-download sharing title
+	 */
+	$title = get_post_meta( get_the_ID(), 'edd_social_discount_title', true );
 
+	?>
+	
+	<p>
+		<strong><label for="edd-social-discount-title"><?php _e( 'Social Discount Title', 'edd-social-discounts' ); ?></label></strong>
+	</p>
+	
+	<p>
+		<input type="text" id="edd-social-discount-title" name="edd_social_discount_title" class="large-text" value="<?php echo esc_attr( $title ); ?>" />
+	</p>
+
+	<?php
+	/**
+	 * Per-download sharing message
+	 */
+	$message = get_post_meta( get_the_ID(), 'edd_social_discount_message', true );
+
+	?>
+	
+	<p><strong><label for="edd-social-discount-message"><?php _e( 'Social Discount Message', 'edd-social-discounts' ); ?></label></strong></p>
+	
+	<p>
+		<textarea id="edd-social-discount-message" name="edd_social_discount_message" class="large-text" cols="40" rows="4"><?php echo esc_attr( $message ); ?></textarea>
+	</p>
+	
 	<?php
 		$locked = get_post_meta( get_the_ID(), 'edd_social_discounts_locked', true );
 	?>
@@ -98,6 +126,37 @@ function edd_social_discounts_edd_save_download( $post_id, $post ) {
 	
 	$social_discount 			= 'edd_social_discount';
 	$social_discount_products 	= '_edd_discount_social_discount_products';
+
+
+
+
+
+	/**************************************************************************************/
+	/* save the edd_social_discount_title meta_key
+	/**************************************************************************************/
+
+	$social_discount_title = $_POST['edd_social_discount_title'] ? sanitize_text_field( $_POST['edd_social_discount_title'] ) : '';
+
+	// only saves discount IDs, not the default value
+	if ( $social_discount_title ) {
+		update_post_meta( $post_id, 'edd_social_discount_title', $social_discount_title );
+	} else {
+		delete_post_meta( $post_id, 'edd_social_discount_title' );
+	}
+
+
+	/**************************************************************************************/
+	/* save the edd_social_discount_message meta_key
+	/**************************************************************************************/
+
+	$social_discount_message = $_POST['edd_social_discount_message'] ? esc_textarea( $_POST['edd_social_discount_message'] ) : '';
+
+	// only saves discount IDs, not the default value
+	if ( $social_discount_message ) {
+		update_post_meta( $post_id, 'edd_social_discount_message', $social_discount_message );
+	} else {
+		delete_post_meta( $post_id, 'edd_social_discount_message' );
+	}
 
 	/**************************************************************************************/
 	/* save the edd_social_discounts_locked checkbox

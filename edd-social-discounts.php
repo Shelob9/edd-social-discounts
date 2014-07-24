@@ -47,6 +47,11 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 		public static $share_box_enabled = true;
 
 		/**
+		 * Class Properties
+		 */
+		public $discounts;
+
+		/**
 		 * Main Instance
 		 *
 		 * Ensures that only one instance exists in memory at any one
@@ -62,6 +67,9 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 				self::$instance->includes();
 				self::$instance->hooks();
 				self::$instance->licensing();
+
+				// Setup objects
+				self::$instance->discounts 	= new EDD_Social_Discounts_Discounts;
 			}
 
 			return self::$instance;
@@ -142,7 +150,11 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 				include( dirname( $this->file ) . '/includes/EDD_License_Handler.php' );
 			}
 
-			require_once( dirname( $this->file ) . '/includes/discount-functions.php' );
+			// classes
+			require_once( dirname( $this->file ) . '/includes/class-discounts.php' );
+
+
+		//	require_once( dirname( $this->file ) . '/includes/discount-functions.php' );
 			require_once( dirname( $this->file ) . '/includes/ajax-functions.php' );
 			require_once( dirname( $this->file ) . '/includes/functions.php' );
 			require_once( dirname( $this->file ) . '/includes/template-functions.php' );
@@ -150,14 +162,11 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 			require_once( dirname( $this->file ) . '/includes/admin-settings.php' );
 			require_once( dirname( $this->file ) . '/includes/shortcode.php' );
 
-
-		//	require_once( dirname( $this->file ) . '/includes/twitter.php' );
-			
-
 			if ( ! is_admin() )
 				return;
 
 			require_once( dirname( $this->file ) . '/includes/admin-discounts.php' );
+			require_once( dirname( $this->file ) . '/includes/admin-discount-functions.php' );
 			require_once( dirname( $this->file ) . '/includes/metabox.php' );
 			require_once( dirname( $this->file ) . '/includes/view-order-details.php' );
 			

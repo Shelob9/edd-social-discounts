@@ -115,6 +115,7 @@ function edd_social_discounts_is_enabled( $network = '' ) {
 
 /**
  * Checks to see if the download is locked or not
+ * 
  * @return boolean true if locked, false otherwise
  * @since  2.1
  */

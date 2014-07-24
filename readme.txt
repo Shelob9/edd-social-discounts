@@ -25,13 +25,6 @@ After activation, configure the plugin from downloads -> settings -> extensions
 
 == Changelog ==
 
-= 2.1 =
-* New: Per-product social discounts!
-* New: "Social Discount Downloads" select field on discount page to select the products for the sharing discount
-* New: "Social Sharing Discount" metabox on each download's edit/publish screen to select the discount the download should use when shared
-* Tweak: Removed redundant EDD licensing files as they are now included in the core EDD plugin
-* 
-
 = 2.0.1 =
 * New: edd_social_discounts_share_url filter hook for modifying the URL
 * New: edd_social_discounts_success_title filter hook

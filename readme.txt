@@ -28,7 +28,7 @@ After activation, configure the plugin from downloads -> settings -> extensions
 v2.0.2
 July 24th, 2014
 
-New:   When using shortcode on the checkout, the cart total and discount will show after share
+New:   When using shortcode on the checkout, the cart total and discount will updated via ajax after share
 Tweak: Removed old EDD licensing files that are no longer required
 
 v2.0.1

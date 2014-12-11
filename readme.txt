@@ -25,6 +25,12 @@ After activation, configure the plugin from downloads -> settings -> extensions
 
 == Changelog ==
 
+v2.0.3
+December 10th, 2014
+
+* New: Activation class to check for the existence of EDD
+* Fix: Plugin deactivating when EDD was updated
+
 v2.0.2
 July 24th, 2014
 

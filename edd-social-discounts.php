@@ -3,7 +3,7 @@
 Plugin Name: Easy Digital Downloads - Social Discounts
 Plugin URI: https://easydigitaldownloads.com/extensions/edd-social-discounts/
 Description: Offer customers a discount for sharing your products.
-Version: 2.0.2
+Version: 2.0.3
 Author: Andrew Munro, Sumobi
 Author URI: http://sumobi.com/
 License: GPL-2.0+
@@ -98,7 +98,7 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 		 * @return void
 		 */
 		private function setup_globals() {
-			$this->version 		= '2.0.2';
+			$this->version 		= '2.0.3';
 			$this->title 		= 'EDD Social Discounts';
 
 			// paths
@@ -137,8 +137,7 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 		 * @return void
 		 */
 		private function includes() {
-			if( ! class_exists( 'EDD_License' ) )
-				include( dirname( $this->file ) . '/includes/EDD_License_Handler.php' );
+			
 		}
 
 		/**
@@ -149,26 +148,32 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 		 * @return void
 		 */
 		private function hooks() {
-			// check for EDD when plugin is activated
-			add_action( 'admin_init', array( $this, 'activation' ), 1 );
+
 			// display sharing buttons on product pages automatically
 			add_action( 'template_redirect', array( $this, 'display_share_buttons' ) );
+
 			// collect IDs of shared downloads
 			add_action( 'template_redirect', array( $this, 'shared_downloads' ) );
+
 			// share product + apply discount using ajax
 			add_action( 'wp_ajax_share_product',  array( $this, 'share_product' ) );
 			add_action( 'wp_ajax_nopriv_share_product',  array( $this, 'share_product' ) );
+
 			// print scripts
 			add_action( 'wp_footer', array( $this, 'print_script' ) );
+
 			// view order details
 			add_action( 'edd_view_order_details_main_after', array( $this, 'view_order_details' ) );
+
 			// load CSS
 			add_action( 'wp_head',  array( $this, 'load_css' ) );
 
 			// add settings
 			add_filter( 'edd_settings_extensions', array( $this, 'settings' ) );
+
 			// update post meta on successful purchase
 			add_filter( 'edd_complete_purchase', array( $this, 'update_post_meta' ) );
+			
 			// settings link on plugin page
 			add_filter( 'plugin_action_links_' . $this->basename, array( $this, 'settings_link' ), 10, 2 );
 			
@@ -225,57 +230,13 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 		}
 
 		/**
-		 * Activation function fires when the plugin is activated.
-		 *
-		 * This function is fired when the activation hook is called by WordPress,
-		 * it flushes the rewrite rules and disables the plugin if EDD isn't active
-		 * and throws an error.
-		 *
-		 * @since 2.0
-		 * @access public
-		 *
-		 * @return void
-		 */
-		public function activation() {
-			if ( ! class_exists( 'Easy_Digital_Downloads' ) ) {
-				// is this plugin active?
-				if ( is_plugin_active( $this->basename ) ) {
-					// deactivate the plugin
-			 		deactivate_plugins( $this->basename );
-			 		// unset activation notice
-			 		unset( $_GET[ 'activate' ] );
-			 		// display notice
-			 		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
-				}
-
-			}
-		}
-
-		/**
-		 * Admin notices
-		 *
-		 * @since 2.0
-		*/
-		public function admin_notices() {
-			$edd_plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/easy-digital-downloads/easy-digital-downloads.php', false, false );
-
-			if ( ! is_plugin_active('easy-digital-downloads/easy-digital-downloads.php') ) {
-				echo '<div class="error"><p>' . sprintf( __( 'You must install %sEasy Digital Downloads%s to use the EDD Social Discounts Add-On.', 'edd-social-discounts' ), '<a href="http://easydigitaldownloads.com" title="Easy Digital Downloads" target="_blank">', '</a>' ) . '</p></div>';
-			}
-
-			if ( $edd_plugin_data['Version'] < '1.8.4' ) {
-				echo '<div class="error"><p>' . __( 'The EDD Social Discounts requires at least Easy Digital Downloads Version 1.8.4. Please update Easy Digital Downloads.', 'edd-social-discounts' ) . '</p></div>';
-			}
-		}
-
-		/**
 		 * Display the share button
 		 * Automatically adds the sharing buttons to product pages. Can be overridden with shortcode on per product basis
 		 *
 		 * @since 2.0
 		*/
 		public function display_share_buttons() {
-			$display = edd_get_option( 'edd_sd_display_services', 'after' );
+			$display = function_exists( 'edd_get_option' ) ? edd_get_option( 'edd_sd_display_services', 'after' ) : '';
 
 			// don't automatically output the sharing services
 			if ( 'none' != $display ) {
@@ -327,6 +288,11 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 		 * @since  2.0
 		 */
 		public function share_box( $id = '', $title = '', $message = '', $tweet = '' ) {
+
+			if ( ! function_exists( 'EDD' ) ) {
+				return;
+			}
+
 			global $edd_options;
 
 			// return if our share box has been turned off
@@ -441,7 +407,7 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 					$linkedin_counter = edd_get_option( 'edd_sd_linkedin_counter', 'top' );
 				?>
 				<div class="edd-sd-service linkedin">
-				<script src="http://platform.linkedin.com/in.js" type="text/javascript">lang: <?php echo $locale; ?></script>
+				<script src="//platform.linkedin.com/in.js" type="text/javascript">lang: <?php echo $locale; ?></script>
 				<script type="IN/Share" data-counter="<?php echo $linkedin_counter; ?>" data-onSuccess="share" data-url="<?php echo $share_url; ?>"></script>
 				</div>
 				<?php endif; ?>
@@ -742,6 +708,10 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 		public function shared_downloads() {
 			$ids = array();
 
+			if ( ! function_exists( 'EDD' ) ) {
+				return;
+			}
+
 			// get shared IDs from session
 			$store_this = EDD()->session->get( 'edd_shared_id' );
 	
@@ -855,9 +825,8 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 		 * @since  2.0
 		 */
 		public function is_enabled( $network = '' ) {
-			global $edd_options;
 
-			$networks = edd_get_option( 'edd_sd_services', '' );
+			$networks = function_exists( 'edd_get_option' ) ? edd_get_option( 'edd_sd_services', '' ) : '';
 
 			// if network is passed as parameter
 			if ( $network ) {
@@ -974,7 +943,6 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 				array(
 					'id' => 'edd_sd_services',
 					'name' => __( 'Social Services To Enable', 'edd-social-discounts' ),
-					'desc' => __( '', 'edd-social-discounts' ),
 					'type' => 'multicheck',
 					'options' => apply_filters( 'edd_social_discounts_settings_services', array(
 							'twitter' =>  __( 'Twitter', 'edd-social-discounts' ),
@@ -1163,30 +1131,38 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 		}
 
 	}
+	
+	/**
+	 * Loads a single instance of EDD Social Discounts
+	 *
+	 * This follows the PHP singleton design pattern.
+	 *
+	 * Use this function like you would a global variable, except without needing
+	 * to declare the global.
+	 *
+	 * @example <?php $edd_social_discounts = edd_social_discounts(); ?>
+	 * @since 2.0
+	 * @see EDD_Social_Discounts::get_instance()
+	 * @return object Returns an instance of the EDD_Social_Discounts class
+	 */
+	function edd_social_discounts() {
+
+	    if ( ! class_exists( 'Easy_Digital_Downloads' ) ) {
+
+	        if ( ! class_exists( 'EDD_Extension_Activation' ) ) {
+	            require_once 'includes/class-activation.php';
+	        }
+
+	        $activation = new EDD_Extension_Activation( plugin_dir_path( __FILE__ ), basename( __FILE__ ) );
+	        $activation = $activation->run();
+	        return EDD_Social_Discounts::get_instance();
+	        
+	    } else {
+	        return EDD_Social_Discounts::get_instance();
+	    }
+	}
+	add_action( 'plugins_loaded', 'edd_social_discounts', apply_filters( 'edd_social_discounts_action_priority', 10 ) );
 
 
-/**
- * Loads a single instance of EDD Social Discounts
- *
- * This follows the PHP singleton design pattern.
- *
- * Use this function like you would a global variable, except without needing
- * to declare the global.
- *
- * @example <?php $edd_social_discounts = edd_social_discounts(); ?>
- * @since 2.0
- * @see EDD_Social_Discounts::get_instance()
- * @return object Returns an instance of the EDD_Social_Discounts class
- */
-function edd_social_discounts() {
-	return EDD_Social_Discounts::get_instance();
-}
-
-/**
- * Loads plugin after all the others have loaded and have registered their hooks and filters
- *
- * @since 2.0
-*/
-add_action( 'plugins_loaded', 'edd_social_discounts', apply_filters( 'edd_social_discounts_action_priority', 10 ) );
 
 endif;

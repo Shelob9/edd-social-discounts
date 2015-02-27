@@ -379,6 +379,18 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 			else {
 				$twitter_default_text = '';
 			}
+			
+			/**
+			 * Filter the suggested Twitter message
+			 *
+			 * @since 2.0.3
+			 *
+			 * @param string $twitter_default_text Suggested tweet text.
+			 */
+			$twitter_default_text_temp = apply_filters( 'edd_social_discounts_suggested_tweet', $twitter_default_text );
+			if ( is_string( $twitter_default_text_temp ) ){
+				$twitter_default_text = $twitter_default_text_temp;
+			}
 
 			// URL to share
 			$share_url = apply_filters( 'edd_social_discounts_share_url', post_permalink( $id ) );

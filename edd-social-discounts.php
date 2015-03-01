@@ -383,7 +383,7 @@ if ( ! class_exists( 'EDD_Social_Discounts' ) ) :
 			/**
 			 * Filter the suggested Twitter message
 			 *
-			 * @since 2.0.3
+			 * @since 2.0.4
 			 *
 			 * @param string $twitter_default_text Suggested tweet text.
 			 */
